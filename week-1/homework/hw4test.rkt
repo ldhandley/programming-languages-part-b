@@ -10,7 +10,11 @@
 (require rackunit)
 
 ;; Helper functions
+; 1 1 1 1 1 1 1 ...
 (define ones (lambda () (cons 1 ones)))
+(define (f x) (cons x (lambda () (f (+ x 1)))))
+; 1 2 3 4 5 6 7 ...
+(define naturals (lambda () (f 1)))
 (define a 2)
 
 (define tests
@@ -33,13 +37,21 @@
               (check-equal? (string-append-map 
                   (list "dan" "dog" "curry" "dog2") 
                   ".jpg") '("dan.jpg" "dog.jpg" "curry.jpg" "dog2.jpg")))
-   #|
+   
    ; list-nth-mod test
-   (check-equal? (list-nth-mod (list 0 1 2 3 4) 2) 2 "list-nth-mod test")
+   (test-case "list-nth-mod test" (check-equal? (list-nth-mod (list 0 1 2 3 4) 2)
+                                                2))
+   (test-case "list-nth-mod test2" (check-equal? (list-nth-mod (list 0 1 2) 7)
+                                                1))
    
    ; stream-for-n-steps test
-   (check-equal? (stream-for-n-steps ones 2) (list 1 1) "stream-for-n-steps test")
-   
+   (test-case "stream-for-n-steps test" (check-equal? (stream-for-n-steps ones 2)
+                                                      (list 1 1)))
+   (test-case "stream-for-n-steps test2" (check-equal? (stream-for-n-steps naturals 5)
+                                                      (list 1 2 3 4 5)))
+   (test-case "stream-for-n-steps test3" (check-equal? (stream-for-n-steps naturals 3)
+                                                      (list 1 2 3)))
+   #|
    ; funny-number-stream test
    (check-equal? (stream-for-n-steps funny-number-stream 16) (list 1 2 3 4 -5 6 7 8 9 -10 11 12 13 14 -15 16) "funny-number-stream test")
    
