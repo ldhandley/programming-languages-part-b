@@ -51,23 +51,42 @@
                                                       (list 1 2 3 4 5)))
    (test-case "stream-for-n-steps test3" (check-equal? (stream-for-n-steps naturals 3)
                                                       (list 1 2 3)))
-   #|
+
    ; funny-number-stream test
-   (check-equal? (stream-for-n-steps funny-number-stream 16) (list 1 2 3 4 -5 6 7 8 9 -10 11 12 13 14 -15 16) "funny-number-stream test")
-   
+   (test-case "funny-number-stream test" (check-equal? (stream-for-n-steps funny-number-stream 16)
+                                                       (list 1 2 3 4 -5 6 7 8 9 -10 11 12 13 14 -15 16)))
+
    ; dan-then-dog test
-   (check-equal? (stream-for-n-steps dan-then-dog 1) (list "dan.jpg") "dan-then-dog test")
-   
+   (test-case "dan-then-dog test1" (check-equal? (stream-for-n-steps dan-then-dog 1) (list "dan.jpg")))
+   (test-case "dan-then-dog test2" (check-equal? (stream-for-n-steps dan-then-dog 5) (list "dan.jpg" "dog.jpg" "dan.jpg" "dog.jpg" "dan.jpg")))
+
+
    ; stream-add-zero test
-   (check-equal? (stream-for-n-steps (stream-add-zero ones) 1) (list (cons 0 1)) "stream-add-zero test")
-   
+   (test-case "stream-add-zero test1" (check-equal? (stream-for-n-steps (stream-add-zero ones) 1)
+                                                   (list (cons 0 1))))
+   (test-case "stream-add-zero test2" (check-equal? (stream-for-n-steps (stream-add-zero naturals) 5)
+                                                   (list (cons 0 1)
+                                                         (cons 0 2)
+                                                         (cons 0 3)
+                                                         (cons 0 4)
+                                                         (cons 0 5))))
+  
    ; cycle-lists test
-   (check-equal? (stream-for-n-steps (cycle-lists (list 1 2 3) (list "a" "b")) 3) (list (cons 1 "a") (cons 2 "b") (cons 3 "a")) 
-                 "cycle-lists test")
-   
+   (test-case "cycle-lists test" (check-equal? (stream-for-n-steps (cycle-lists (list 1 2 3) (list "a" "b")) 3)
+                                               (list (cons 1 "a") (cons 2 "b") (cons 3 "a")) ))
+   (test-case "cycle-lists test2" (check-equal? (stream-for-n-steps (cycle-lists (list 1 2 3) (list "a" "b" "c" "d")) 6)
+                                               (list (cons 1 "a") (cons 2 "b") (cons 3 "c") (cons 1 "d") (cons 2 "a") (cons 3 "b"))))
+
+
+
    ; vector-assoc test
-   (check-equal? (vector-assoc 4 (vector (cons 2 1) (cons 3 1) (cons 4 1) (cons 5 1))) (cons 4 1) "vector-assoc test")
-   
+   (test-case "vector-assoc test1" (check-equal? (vector-assoc 4 (vector (cons 2 1) (cons 3 1) (cons 4 1) (cons 5 1))) (cons 4 1)))
+   (test-case "vector-assoc test2" (check-equal? (vector-assoc 10 (vector (cons 2 1) (cons 3 1) (cons 4 1) (cons 5 1))) #f))
+   (test-case "vector-assoc test3" (check-equal? (vector-assoc 1 (vector (list 1) (list 1) (list 1) (list 1))) #f))
+   (test-case "vector-assoc test4" (check-equal? (vector-assoc 2 (vector (list 1) (list 1 2) (cons 2 1) 4)) (cons 2 1)))
+
+
+   #|    
    ; cached-assoc tests
    (check-equal? ((cached-assoc (list (cons 1 2) (cons 3 4)) 3) 3) (cons 3 4) "cached-assoc test")
    

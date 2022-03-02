@@ -29,3 +29,43 @@
                                         l
                                         (add-to-list ((cdr s)) (- n 1) (append l (list (car s))))))])
     (add-to-list (s) n '())))
+
+(define (funny-number-stream-helper x)
+  (lambda () (cons x (funny-number-stream-helper (cond [(< x 0) ;if the current x is negative, we want to make it positive and add 1 
+                                                        (+ (- x) 1)]
+                                                       [(= (remainder (+ x 1) 5) 0) ;if the next x (current x + 1) is divisible by 5, make it negative
+                                                        (- (+ x 1))]
+                                                       [#t ;otherwise, just add 1 to get the next x
+                                                        (+ x 1)]))))) 
+(define funny-number-stream (funny-number-stream-helper 1))
+
+;put helper function inside letrec this time... better style? I feel like it's harder to read, personally...
+(define dan-then-dog (letrec ([dan-then-dog-helper (lambda (x)
+                                                     (lambda () (cons x (dan-then-dog-helper (cond [(equal? x "dan.jpg") "dog.jpg"]
+                                                                                                   [(equal? x "dog.jpg") "dan.jpg"])))))])
+                       (dan-then-dog-helper "dan.jpg")))
+
+(define (stream-add-zero s)
+  (lambda () (cons (cons 0 (car (s)))
+                   (stream-add-zero (cdr (s))))))
+
+(define (cycle-lists xs ys)
+  (letrec ([cycle-helper (lambda (n)
+                           (cons (cons (list-nth-mod xs n)
+                                       (list-nth-mod ys n))
+                                 (lambda () (cycle-helper (+ n 1)))))])
+    (lambda () (cycle-helper 0))))
+
+(define (vector-assoc v vec)
+  (letrec ([vector-assoc-helper
+         (lambda (pos)
+           (cond [(>= pos (vector-length vec)) #f]
+                 [(or (not (pair? (vector-ref vec pos)))
+                      (equal? (cdr (vector-ref vec pos)) null)) ;need this b/c list of length 1 is also a pair
+                  (vector-assoc-helper (+ pos 1))]
+                 [(not (equal? (car (vector-ref vec pos)) v))
+                  (vector-assoc-helper (+ pos 1))]
+                 [(equal? (car (vector-ref vec pos)) v)
+                  (vector-ref vec pos)]))])
+    (if (not (vector? vec)) #f (vector-assoc-helper 0))))
+
