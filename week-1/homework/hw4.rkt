@@ -69,3 +69,30 @@
                   (vector-ref vec pos)]))])
     (if (not (vector? vec)) #f (vector-assoc-helper 0))))
 
+(define (cached-assoc xs n)
+  (letrec ([memo (make-vector n #f)]
+           [f (lambda (v)
+                (let ([ans (vector-assoc v memo)]
+                      [pos 0])
+                  (if ans
+                      ans ;is this right?
+                      (let ([new-ans (assoc v xs)])
+                        (if new-ans
+                            (begin
+                              (displayln "Using cache...")
+                              (vector-set! memo pos new-ans)
+                              (if (< pos n)
+                                  (set! pos (+ pos 1))
+                                  (set! pos 0))
+                              (displayln memo)
+                              new-ans) 
+                            (begin
+                              (displayln "No need to use cache")
+                              #f))))))])
+    f))
+;It doesn't look like it's using the cache
+; It's returning the right answer, but maybe never storing it
+; or pulling anything out of storage. Now that I think about
+; it, the cache gets re-made every time I call cached-assoc...
+; Need to figure out how to test the caching.
+; Then delete prints before turning in hw

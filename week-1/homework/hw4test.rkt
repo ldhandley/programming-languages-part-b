@@ -85,11 +85,13 @@
    (test-case "vector-assoc test3" (check-equal? (vector-assoc 1 (vector (list 1) (list 1) (list 1) (list 1))) #f))
    (test-case "vector-assoc test4" (check-equal? (vector-assoc 2 (vector (list 1) (list 1 2) (cons 2 1) 4)) (cons 2 1)))
 
-
-   #|    
+  
    ; cached-assoc tests
-   (check-equal? ((cached-assoc (list (cons 1 2) (cons 3 4)) 3) 3) (cons 3 4) "cached-assoc test")
-   
+   (test-case "cached-assoc test" (check-equal? ((cached-assoc (list (cons 1 2) (cons 3 4)) 3) 3) (cons 3 4)))
+   (test-case "cached-assoc test2" (check-equal? ((cached-assoc (list (cons 1 2) (cons 3 4) (cons 4 4) (cons 5 4) (cons 6 4) (cons 7 6)) 3) 7) (cons 7 6)))
+   (test-case "cached-assoc test3" (check-equal? ((cached-assoc (list (cons 1 2) (cons 3 4)) 3) 4) #f))
+  
+   #|  
    ; while-less test
    (check-equal? (while-less 7 do (begin (set! a (+ a 1)) a)) #t "while-less test")
    |#
