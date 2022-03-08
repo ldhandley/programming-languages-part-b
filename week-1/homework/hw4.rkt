@@ -1,11 +1,8 @@
 
 #lang racket
 
-(provide (all-defined-out)) ;; so we can put tests in a second file
+(provide (all-defined-out))
 
-;; put your code below
-
-;calls next-in-sequence
 (define (sequence low high stride)
   (cond [(< high low) null]
         [(>= high low) (cons low
@@ -22,8 +19,6 @@
         [(= (length xs) 0) (error "list-nth-mod: empty list")]
         [#t (get-ith xs 0 (remainder n (length xs)))])))
 
-;returns the first n elements in a list from the stream
-;assume n is non-negative
 (define (stream-for-n-steps s n)
   (letrec ([add-to-list (lambda (s n l) (if (= n 0)
                                         l
@@ -75,24 +70,14 @@
                 (let ([ans (vector-assoc v memo)]
                       [pos 0])
                   (if ans
-                      ans ;is this right?
+                      ans 
                       (let ([new-ans (assoc v xs)])
                         (if new-ans
                             (begin
-                              (displayln "Using cache...")
                               (vector-set! memo pos new-ans)
                               (if (< pos n)
                                   (set! pos (+ pos 1))
                                   (set! pos 0))
-                              (displayln memo)
                               new-ans) 
-                            (begin
-                              (displayln "No need to use cache")
-                              #f))))))])
+                              #f)))))])
     f))
-;It doesn't look like it's using the cache
-; It's returning the right answer, but maybe never storing it
-; or pulling anything out of storage. Now that I think about
-; it, the cache gets re-made every time I call cached-assoc...
-; Need to figure out how to test the caching.
-; Then delete prints before turning in hw
