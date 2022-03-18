@@ -14,10 +14,16 @@
    "Sample tests for Assignment 5"
    
    ;; check racketlist to mupllist with normal list
-   (check-equal? (racketlist->mupllist (list (int 3) (int 4))) (apair (int 3) (apair (int 4) (aunit))) "racketlist->mupllist test")
    
+   (check-equal? (racketlist->mupllist (list)) (aunit) "racketlist->mupllist test1")
+   (check-equal? (racketlist->mupllist (list (int 4))) (apair (int 4) (aunit)) "racketlist->mupllist test2")
+   (check-equal? (racketlist->mupllist (list (int 3) (int 4))) (apair (int 3) (apair (int 4) (aunit))) "racketlist->mupllist test3")
+   (check-equal? (racketlist->mupllist (list (int 3) (int 4) (int 5))) (apair (int 3) (apair (int 4) (apair (int 5) (aunit)))) "racketlist->mupllist test4")
+   (check-equal? (racketlist->mupllist (list (add (int 5) (int 5)))) (apair (add (int 5) (int 5)) (aunit)) "racketlist->mupllist test2")
+
+   #|
    ;; check mupllist to racketlist with normal list
-   (check-equal? (mupllist->racketlist (apair (int 3) (apair (int 4) (aunit)))) (list (int 3) (int 4)) "racketlist->mupllist test")
+   (check-equal? (mupllist->racketlist (apair (int 3) (apair (int 4) (aunit)))) (list (int 3) (int 4)) "mupllist->racketlist test")
 
    ;; tests if ifgreater returns (int 2)
    (check-equal? (eval-exp (ifgreater (int 3) (int 4) (int 3) (int 2))) (int 2) "ifgreater test")
@@ -52,7 +58,7 @@
    (eval-exp (call (call mupl-mapAddN (int 7))
                    (racketlist->mupllist 
                     (list (int 3) (int 4) (int 9)))))) (list (int 10) (int 11) (int 16)) "combined test")
-   
+   |#
    ))
 
 (require rackunit/text-ui)

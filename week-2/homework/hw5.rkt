@@ -20,7 +20,10 @@
 ;; a closure is not in "source" programs but /is/ a MUPL value; it is what functions evaluate to
 (struct closure (env fun) #:transparent) 
 
-;; Problem 1
+(define (racketlist->mupllist l)
+  (if (eq? (length l) 0)
+      (aunit)
+      (apair (car l) (racketlist->mupllist (cdr l)))))
 
 ;; CHANGE (put your solutions here)
 
