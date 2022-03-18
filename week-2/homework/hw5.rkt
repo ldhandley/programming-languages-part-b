@@ -20,13 +20,17 @@
 ;; a closure is not in "source" programs but /is/ a MUPL value; it is what functions evaluate to
 (struct closure (env fun) #:transparent) 
 
+; Do we need to be able to handle nested lists?
+; Problem 1
 (define (racketlist->mupllist l)
   (if (eq? (length l) 0)
       (aunit)
       (apair (car l) (racketlist->mupllist (cdr l)))))
 
-;; CHANGE (put your solutions here)
-
+(define (mupllist->racketlist l)
+  (if (aunit? l)
+      '()
+      (cons (apair-e1 l) (mupllist->racketlist (apair-e2 l)))))
 ;; Problem 2
 
 ;; lookup a variable in an environment
