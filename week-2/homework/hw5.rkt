@@ -47,6 +47,26 @@
 (define (eval-under-env e env)
   (cond [(var? e) 
          (envlookup env (var-string e))]
+        [(int? e)
+         e]
+        [(aunit? e)
+         e]
+        [(fun? e)
+         e]
+        [(apair? e) ;do I need to evaluate v1 and v2?
+         (let ([v1 (eval-under-env (apair-e1 e) env)]
+               [v2 (eval-under-env (apair-e2 e) env)])
+           (apair v1 v2))]
+        [(fst? e)
+         (let ([v (eval-under-env (fst-e e) env)])
+             (if (apair? v)
+             (apair-e1 v)
+             (error "MUPL fst applied to a non-pair")))]
+        [(snd? e)
+         (let ([v (eval-under-env (snd-e e) env)])
+             (if (apair? v)
+             (apair-e2 v)
+             (error "MUPL snd applied to a non-pair")))]
         [(add? e) 
          (let ([v1 (eval-under-env (add-e1 e) env)]
                [v2 (eval-under-env (add-e2 e) env)])
@@ -55,6 +75,19 @@
                (int (+ (int-num v1) 
                        (int-num v2)))
                (error "MUPL addition applied to non-number")))]
+        [(ifgreater? e)
+         (let ([v1 (eval-under-env (ifgreater-e1 e) env)]
+               [v2 (eval-under-env (ifgreater-e2 e) env)])
+           (if (and (int? v1)
+                    (int? v2))
+               (if (> (int-num v1) (int-num v2))
+                   (eval-under-env (ifgreater-e3 e) env)
+                   (eval-under-env (ifgreater-e4 e) env))
+               (error "MUPL ifgreater applied to non-number")))]
+        [(isaunit? e)    ;does #t and #f belong in MUPL?
+         (if (aunit? e)
+             (int 1)
+             (int 0))]
         ;; CHANGE add more cases here
         [#t (error (format "bad MUPL expression: ~v" e))]))
 
