@@ -12,7 +12,8 @@
 (define tests
   (test-suite
    "Sample tests for Assignment 5"
-   
+
+   ;;PROBLEM 1 
    ;; check racketlist to mupllist with normal list
    
    (check-equal? (racketlist->mupllist (list)) (aunit) "racketlist->mupllist test1")
@@ -28,6 +29,7 @@
    (check-equal? (mupllist->racketlist (apair (int 4) (aunit))) (list (int 4)) "mupllist->racketlist test2")
    (check-equal? (mupllist->racketlist (aunit)) (list) "mupllist->racketlist test3")
 
+   ;;PROBLEM 2 
    ;EVAL-EXP
 
    ;;ALL VALUES EVAL TO THEMSELVES
@@ -59,6 +61,7 @@
    (check-equal? (eval-exp (isaunit (closure '() (fun #f "x" (aunit))))) (int 0) "isaunit test")
 
    #|
+   ;; PROBLEM 3
    ;; ifaunit test
    (check-equal? (eval-exp (ifaunit (int 1) (int 2) (int 3))) (int 3) "ifaunit test")
    

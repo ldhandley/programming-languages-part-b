@@ -53,7 +53,7 @@
          e]
         [(fun? e)
          e]
-        [(apair? e) ;do I need to evaluate v1 and v2?
+        [(apair? e) 
          (let ([v1 (eval-under-env (apair-e1 e) env)]
                [v2 (eval-under-env (apair-e2 e) env)])
            (apair v1 v2))]
@@ -84,7 +84,7 @@
                    (eval-under-env (ifgreater-e3 e) env)
                    (eval-under-env (ifgreater-e4 e) env))
                (error "MUPL ifgreater applied to non-number")))]
-        [(isaunit? e)    ;does #t and #f belong in MUPL?
+        [(isaunit? e)
          (if (aunit? e)
              (int 1)
              (int 0))]
