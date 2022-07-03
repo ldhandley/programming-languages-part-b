@@ -117,7 +117,7 @@
         
 ;; Problem 3
 
-(define (ifaunit e1 e2 e3) (if (aunit? e1) e2 e3))
+(define (ifaunit e1 e2 e3) (if (aunit? (eval-under-env e1 '())) e2 e3))
 
 (define (mlet* lstlst e2)
   (letrec ([mlet-helper
@@ -134,7 +134,10 @@
                       current-env))])
     (mlet-helper lstlst '() e2)))
 
-(define (ifeq e1 e2 e3 e4) "CHANGE")
+(define (ifeq e1 e2 e3 e4)
+  (if (= (int-num (eval-under-env e1 '())) (int-num (eval-under-env e2 '())))
+      e3
+      e4))
 
 ;; Problem 4
 
