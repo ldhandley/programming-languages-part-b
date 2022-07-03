@@ -119,7 +119,20 @@
 
 (define (ifaunit e1 e2 e3) (if (aunit? e1) e2 e3))
 
-(define (mlet* lstlst e2) "CHANGE")
+(define (mlet* lstlst e2)
+  (letrec ([mlet-helper
+            (lambda (lstlst current-env e2)
+              (if (empty? lstlst)
+                  (eval-under-env e2 current-env)
+                  (mlet-helper (rest lstlst) (create-new-env (first lstlst) current-env) e2)))]
+           [create-new-env
+            (lambda (new-lst current-env)
+              (append (list
+                       (cons
+                        (car new-lst)
+                        (eval-under-env (cdr new-lst) current-env)))
+                      current-env))])
+    (mlet-helper lstlst '() e2)))
 
 (define (ifeq e1 e2 e3 e4) "CHANGE")
 
